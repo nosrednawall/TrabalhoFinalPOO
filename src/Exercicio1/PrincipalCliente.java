@@ -10,12 +10,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class PrincipalCliente {
+
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 		String enderecoServidor = "localhost";
 		int portaServidor = 12258;
 		String saida;
 		String arquivo = "/home/Anderson/workspace/TrabalhoFinal/arq2.txt";
+
 		try {
 
 			File file = new File(arquivo);
@@ -25,27 +27,28 @@ public class PrincipalCliente {
 
 			Socket conexao = new Socket(enderecoServidor, portaServidor);
 			DataInputStream entrada = new DataInputStream(conexao.getInputStream());
-			
-			while(true){
-			
-			if ((saida = entrada.readUTF()) != null) {
-				escrevendo.print(saida);
-				escrevendo.println();
-			}else{
-				break;
-			}
+			saida = entrada.readUTF();
+			boolean fim = false;
+			while (fim!=true) {
+				saida = entrada.readUTF();
+				if (!saida.equals("TERMINATE")) {
+					escrevendo.println(saida);
+				} else {
+					entrada.close();
+					conexao.close();
+					fim = true;
+				}				
+				System.out.println(saida);
 			}
 			escrevendo.flush();
 			escrevendo.close();
-			entrada.close();
-			conexao.close();
+			
 
-			System.out.println("Saiu do loop");
 		} catch (UnknownHostException e) {
 			System.out.println("Erro de rede");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Erro de sistema");
+			System.out.println("Erro de sistema ");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -53,3 +56,12 @@ public class PrincipalCliente {
 		}
 	}
 }
+
+/*
+ * if ((saida = entrada.readUTF()) != null) {
+ * 
+ * escrevendo.print(saida); } else {
+ * 
+ * break; }
+ * 
+ */

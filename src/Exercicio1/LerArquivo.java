@@ -24,29 +24,34 @@ public class LerArquivo {
 			Socket conexao = servidor.accept();
 			DataOutputStream saida = new DataOutputStream(conexao.getOutputStream());
 			SocketAddress s = conexao.getRemoteSocketAddress();
-			
+
 			System.out.println("Passou");
 			System.out.println("Enviando arquivo ao cliente" + s.toString());
 
 			Thread.currentThread().sleep(5000);
-			
+
+			int vez = 0;
+
 			FileReader ler = new FileReader(new File(arquivo));
 			BufferedReader leitor = new BufferedReader(ler);
 			String texto = leitor.readLine();
 			while (true) {
 				if (texto != null) {
 					saida.writeUTF(texto);
-					//texto = leitor.readLine();
-					//System.out.printf("%s\n", texto);
+					vez++;
+					System.out.println("Enviou " + vez);
+					// texto = leitor.readLine();
+					// System.out.printf("%s\n", texto);
 				} else {
+					System.out.println("Fechando as conexoes");
+					saida.writeUTF("TERMINATE");
+					ler.close();
+
+					System.out.println("Conexoes fechadas");
 					break;
 				}
 				texto = leitor.readLine();
 			}
-			ler.close();
-			conexao.close();
-			saida.close();
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
