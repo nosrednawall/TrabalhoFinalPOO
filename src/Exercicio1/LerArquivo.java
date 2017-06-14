@@ -12,47 +12,56 @@ import java.net.SocketAddress;
 
 public class LerArquivo {
 
-	static String texto;
+	//numero da porta dda conexao
 	static int porta = 12258;
+	private static ServerSocket servidor;	
 
-	@SuppressWarnings("static-access")
+
 	public static void LendoArquivo(String arquivo) {
+		//inicio do try
 		try {
-
-			@SuppressWarnings("resource")
-			ServerSocket servidor = new ServerSocket(porta);
+			servidor = new ServerSocket(porta);
+			//conexao com o cliente
 			Socket conexao = servidor.accept();
+			//gera fluxo de dados para transmissao
 			DataOutputStream saida = new DataOutputStream(conexao.getOutputStream());
+			//obtem o endereco do cliente
 			SocketAddress s = conexao.getRemoteSocketAddress();
 
+			//apenas para controle e conhecimento das etapas de processamento
 			System.out.println("Passou");
-			System.out.println("Enviando arquivo ao cliente" + s.toString());
+			System.out.println("Enviando arquivo ao cliente" + s.toString()); //obtem o endereco do cliente
+			
+			//sleep
+			Thread.currentThread();
+			Thread.sleep(5000);
 
-			Thread.currentThread().sleep(5000);
-
-			int vez = 0;
-
-			FileReader ler = new FileReader(new File(arquivo));
-			BufferedReader leitor = new BufferedReader(ler);
+			//abaixo a parte de arquivo
+			int vez = 0; //contador apenas para o controle visual
+			//metodo de leitura utilizando o BufferedReader, já linkando com o arquivo
+			BufferedReader leitor = new BufferedReader(new FileReader(new File(arquivo)));
+			//efetua a leitura da primeira linha no arquivo, e salva na string texto
 			String texto = leitor.readLine();
+			//entra no loop
 			while (true) {
-				if (texto != null) {
-					saida.writeUTF(texto);
-					vez++;
-					System.out.println("Enviou " + vez);
-					// texto = leitor.readLine();
-					// System.out.printf("%s\n", texto);
-				} else {
-					System.out.println("Fechando as conexoes");
-					saida.writeUTF("TERMINATE");
-					ler.close();
-
-					System.out.println("Conexoes fechadas");
-					break;
-				}
-				texto = leitor.readLine();
-			}
-		} catch (FileNotFoundException e) {
+				if (texto != null) { //se o texto for diferente de null, faz abaixo
+					saida.writeUTF(texto); //envia a linha atual via rede
+					vez++; //apenas para controle
+					System.out.println("Enviou " + vez); //apenas para controle
+				} else { //mágica e fim do if
+					System.out.println("Fechando as conexoes"); //apenas para controle
+					saida.writeUTF("TERMINATE"); //mágica
+					leitor.close(); //fechando o leitor
+					System.out.println("Conexoes fechadas"); //apenas para controle
+					break;//saindo do loop
+				}//fim do else
+				texto = leitor.readLine();//lê a proxima linha e salva no texto
+			}//fim do while
+			
+		}// fim do try
+		
+		//inicio dos catchs
+		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -60,5 +69,5 @@ public class LerArquivo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-}
+	}//fim do método lendo arquivo
+} //fim da classe
