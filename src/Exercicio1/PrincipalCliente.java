@@ -17,7 +17,7 @@ public class PrincipalCliente {
 		String enderecoServidor = "localhost"; //endereco do servidor
 		int portaServidor = 12258; //porta de conexao
 		String saida; //para receber as strings do servidor
-		String arquivo = "/home/Anderson/workspace/TrabalhoFinal/arq2.txt"; //localização do arquivo em meu computador
+		String arquivo = "arq2.txt"; //localização do arquivo em meu computador
 
 		//inicio do try
 		try {
@@ -58,7 +58,6 @@ public class PrincipalCliente {
 			System.out.println("Erro de sistema ");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}//fim do main
