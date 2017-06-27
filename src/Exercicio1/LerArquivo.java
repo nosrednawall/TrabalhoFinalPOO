@@ -62,10 +62,14 @@ public class LerArquivo {
 		
 		//inicio dos catchs
 		catch (FileNotFoundException e) {
+			
+			System.out.println("Não achou o arquivo");
 			e.printStackTrace();
 		} catch (IOException e) {
+			System.out.println("Erro de fim de arquivo");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
+			System.out.println("Erro de conexao interrupda");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
